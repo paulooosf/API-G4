@@ -1,25 +1,33 @@
 package br.org.serratec.apig4.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "postagem")
 public class Postagem {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_postagem")
 	private Long id;
+	
+	@Column
 	private String conteudo;
+	
+	@Column(name = "hora_criacao")
 	private LocalDateTime horaCriacao;
 
 	@ManyToOne
 	private Usuario autor;
-
-	@OneToMany(mappedBy = "postagem")
-	private List<Comentario> comentarios;
 
 	public Long getId() {
 		return id;
@@ -53,30 +61,21 @@ public class Postagem {
 		this.autor = autor;
 	}
 
-	public List<Comentario> getComentarios() {
-		return comentarios;
-	}
-
-	public void setComentarios(List<Comentario> comentarios) {
-		this.comentarios = comentarios;
-	}
-
 	public Postagem() {
 
 	}
 
-	public Postagem(Long id, String conteudo, LocalDateTime horaCriacao, Usuario autor, List<Comentario> comentarios) {
+	public Postagem(Long id, String conteudo, LocalDateTime horaCriacao, Usuario autor) {
 		super();
 		this.id = id;
 		this.conteudo = conteudo;
 		this.horaCriacao = horaCriacao;
 		this.autor = autor;
-		this.comentarios = comentarios;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(autor, comentarios, conteudo, horaCriacao, id);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -88,9 +87,7 @@ public class Postagem {
 		if (getClass() != obj.getClass())
 			return false;
 		Postagem other = (Postagem) obj;
-		return Objects.equals(autor, other.autor) && Objects.equals(comentarios, other.comentarios)
-				&& Objects.equals(conteudo, other.conteudo) && Objects.equals(horaCriacao, other.horaCriacao)
-				&& Objects.equals(id, other.id);
+		return Objects.equals(id, other.id);
 	}
 
 }

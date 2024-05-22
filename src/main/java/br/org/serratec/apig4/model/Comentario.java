@@ -3,14 +3,27 @@ package br.org.serratec.apig4.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "comentario")
 public class Comentario {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_comentario")
 	private Long id;
+	
+	@Column(name = "conteudo_comentario")
 	private String conteudoCom;
+	
+	@Column(name = "hora_criacao")
 	private LocalDateTime horaCriacao;
 	
 	@ManyToOne
@@ -62,7 +75,7 @@ public class Comentario {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(conteudoCom, horaCriacao, id, postagem);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -74,9 +87,6 @@ public class Comentario {
 		if (getClass() != obj.getClass())
 			return false;
 		Comentario other = (Comentario) obj;
-		return Objects.equals(conteudoCom, other.conteudoCom) && Objects.equals(horaCriacao, other.horaCriacao)
-				&& Objects.equals(id, other.id) && Objects.equals(postagem, other.postagem);
+		return Objects.equals(id, other.id);
 	}
-	
-	
 }

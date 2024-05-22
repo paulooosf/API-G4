@@ -3,13 +3,24 @@ package br.org.serratec.apig4.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "relacionamento")
 public class Relacionamento {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_relacionamento")
 	private Long id;
+	
+	@Column(name = "data_inicio")
 	private LocalDate dataInicioSeguimento;
 	
 	@ManyToOne
@@ -64,7 +75,7 @@ public class Relacionamento {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dataInicioSeguimento, id, seguidor, seguidos);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -76,9 +87,6 @@ public class Relacionamento {
 		if (getClass() != obj.getClass())
 			return false;
 		Relacionamento other = (Relacionamento) obj;
-		return Objects.equals(dataInicioSeguimento, other.dataInicioSeguimento) && Objects.equals(id, other.id)
-				&& Objects.equals(seguidor, other.seguidor) && Objects.equals(seguidos, other.seguidos);
+		return Objects.equals(id, other.id);
 	}
-	
-	
 }
