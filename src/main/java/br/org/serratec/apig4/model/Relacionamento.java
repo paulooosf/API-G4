@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,12 +21,6 @@ public class Relacionamento {
 	
 	@Column(name = "data_inicio")
 	private LocalDate dataInicioSeguimento;
-	
-	@ManyToOne
-	private Usuario seguidor;
-	
-	@ManyToOne
-	private Usuario seguidos;
 
 	public Long getId() {
 		return id;
@@ -45,32 +38,14 @@ public class Relacionamento {
 		this.dataInicioSeguimento = dataInicioSeguimento;
 	}
 
-	public Usuario getSeguidor() {
-		return seguidor;
-	}
-
-	public void setSeguidor(Usuario seguidor) {
-		this.seguidor = seguidor;
-	}
-
-	public Usuario getSeguidos() {
-		return seguidos;
-	}
-
-	public void setSeguidos(Usuario seguidos) {
-		this.seguidos = seguidos;
-	}
-
 	public Relacionamento() {
 
 	}
 
-	public Relacionamento(Long id, LocalDate dataInicioSeguimento, Usuario seguidor, Usuario seguidos) {
+	public Relacionamento(Long id, LocalDate dataInicioSeguimento) {
 		super();
 		this.id = id;
 		this.dataInicioSeguimento = dataInicioSeguimento;
-		this.seguidor = seguidor;
-		this.seguidos = seguidos;
 	}
 
 	@Override
