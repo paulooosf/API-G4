@@ -9,11 +9,11 @@ import jakarta.persistence.ManyToOne;
 public class RelacionamentoPK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "usuario_seguidor")
 	private Usuario usuarioSeguidor;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "usuario_seguido")
 	private Usuario usuarioSeguido;

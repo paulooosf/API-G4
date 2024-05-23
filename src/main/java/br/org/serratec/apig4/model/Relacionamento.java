@@ -10,17 +10,17 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "relacionamento")
 public class Relacionamento {
-	
+
 	@EmbeddedId
-	private RelacionamentoPK id = new RelacionamentoPK();
-	
+	private RelacionamentoPK id; // = new RelacionamentoPK();
+
 	@Column(name = "data_criacao")
 	private LocalDate dataCriacao;
 
 	public Relacionamento() {
-		
+
 	}
-	
+
 	public Relacionamento(RelacionamentoPK id, LocalDate dataCriacao) {
 		super();
 		this.id = id;
