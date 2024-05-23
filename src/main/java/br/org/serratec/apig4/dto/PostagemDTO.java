@@ -1,5 +1,7 @@
 package br.org.serratec.apig4.dto;
 
-public class PostDTO {
+public class PostagemDTO {
 
+	
+	
 }
