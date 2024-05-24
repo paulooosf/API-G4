@@ -89,4 +89,5 @@ public class Comentario {
 		Comentario other = (Comentario) obj;
 		return Objects.equals(id, other.id);
 	}
+
 }
