@@ -40,7 +40,7 @@ public class PostagemController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Postagem> postar(@RequestBody Postagem postagem) {
+	public ResponseEntity<Postagem> postar(@Valid @RequestBody Postagem postagem) {
 		postagemService.postar(postagem);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -51,7 +51,7 @@ public class PostagemController {
 	}
 	
 	@PutMapping("/editar/{id}")
-	public ResponseEntity<Postagem> editar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
+	public ResponseEntity<Postagem> editar(@PathVariable Long id, @RequestBody Postagem postagem) {
 		return ResponseEntity.ok(postagemService.editar(id, postagem));
 	}
 	
