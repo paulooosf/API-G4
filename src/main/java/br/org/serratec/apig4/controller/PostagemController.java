@@ -1,9 +1,12 @@
 package br.org.serratec.apig4.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,8 +32,9 @@ public class PostagemController {
 	PostagemService postagemService;
 	
 	@GetMapping("/lista")
-	public ResponseEntity<List<Postagem>> listar() {
-		return ResponseEntity.ok(postagemService.listar());
+	public ResponseEntity<Page<Postagem>> listar(@PageableDefault(sort="dataCriacao", direction=Sort.Direction.DESC,
+            page=0, size=10) Pageable pegeable) {
+		return ResponseEntity.ok(postagemService.listar(pegeable));
 	}
 	
 	@GetMapping("/{id}")

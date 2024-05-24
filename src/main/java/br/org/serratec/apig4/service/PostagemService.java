@@ -1,9 +1,10 @@
 package br.org.serratec.apig4.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.org.serratec.apig4.exception.NotFoundException;
@@ -16,8 +17,8 @@ public class PostagemService {
 	@Autowired
 	private PostagemRepository postagemRepository;
 	
-	public List<Postagem> listar() {
-		return postagemRepository.findAll();
+	public Page<Postagem> listar(Pageable pegeable) {
+		return postagemRepository.findAll(pegeable);
 	}
 	
 	public Postagem buscar(Long id) throws NotFoundException {
