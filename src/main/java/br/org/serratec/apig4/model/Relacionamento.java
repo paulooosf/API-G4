@@ -1,6 +1,7 @@
 package br.org.serratec.apig4.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -12,20 +13,10 @@ import jakarta.persistence.Table;
 public class Relacionamento {
 
 	@EmbeddedId
-	private RelacionamentoPK id; // = new RelacionamentoPK();
+	private RelacionamentoPK id = new RelacionamentoPK();
 
-	@Column(name = "data_criacao")
-	private LocalDate dataCriacao;
-
-	public Relacionamento() {
-
-	}
-
-	public Relacionamento(RelacionamentoPK id, LocalDate dataCriacao) {
-		super();
-		this.id = id;
-		this.dataCriacao = dataCriacao;
-	}
+	@Column(name = "data_inicio")
+	private LocalDate dataInicio;
 
 	public RelacionamentoPK getId() {
 		return id;
@@ -35,11 +26,29 @@ public class Relacionamento {
 		this.id = id;
 	}
 
-	public LocalDate getDataCriacao() {
-		return dataCriacao;
+	public LocalDate getDataInicio() {
+		return dataInicio;
 	}
 
-	public void setDataCriacao(LocalDate dataCriacao) {
-		this.dataCriacao = dataCriacao;
+	public void setDataInicio(LocalDate dataInicio) {
+		this.dataInicio = dataInicio;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Relacionamento other = (Relacionamento) obj;
+		return Objects.equals(id, other.id);
+	}
+
 }
