@@ -15,6 +15,7 @@ import br.org.serratec.apig4.model.Relacionamento;
 import br.org.serratec.apig4.model.Usuario;
 import br.org.serratec.apig4.repository.RelacionamentoRepository;
 import br.org.serratec.apig4.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class RelacionamentoService {
@@ -25,18 +26,21 @@ public class RelacionamentoService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
+	
+	//Lista todos os relacionamentos do banco
 	public List<RelacionamentoDTO> findAll() {
 		List<Relacionamento> relacionamentos = relacionamentoRepository.findAll();
 
 		List<RelacionamentoDTO> relacionamentoDTO = new ArrayList<>();
 
 		for (Relacionamento relacionamento : relacionamentos) {
-			RelacionamentoDTO relacDTO = new RelacionamentoDTO(relacionamento);
-			relacionamentoDTO.add(relacDTO);
+			RelacionamentoDTO relacaoDTO = new RelacionamentoDTO(relacionamento);
+			relacionamentoDTO.add(relacaoDTO);
 		}
 		return relacionamentoDTO;
 	}
 
+	//Lista todos os seguidores de um usuário
 	public List<Relacionamento> buscarSeguidoresByUsuarioId(Long id) {
 		List<Relacionamento> relacionamentos = relacionamentoRepository.buscarSeguidoresByUsuarioId(id);
 		if (relacionamentos.isEmpty()) {
@@ -46,6 +50,8 @@ public class RelacionamentoService {
 		return relacionamentos;
 	}
 
+	//Cria um novo relacionamento entre dois usuários
+	@Transactional
 	public RelacionamentoDTO inserir(RelacionamentoInserirDTO relacionamentoInserirDTO) {
 		// Armazena o iD
 		Optional<Usuario> seguidorOpt = usuarioRepository.findById(relacionamentoInserirDTO.getSeguidorId());
@@ -64,5 +70,15 @@ public class RelacionamentoService {
 
 		RelacionamentoDTO relacionamentoDTO = new RelacionamentoDTO(relacionamento);
 		return relacionamentoDTO;
+	}
+	
+	//Desfaz amizade / Deixa de seguir
+	@Transactional
+	public void deletar(Long idUsuarioSeguidor, Long idUsuarioSeguido) {
+        Optional<Relacionamento> relacionamentoOpt = relacionamentoRepository.findByIdUsuarioSeguidorIdAndIdUsuarioSeguidoId(idUsuarioSeguidor, idUsuarioSeguido);
+		if (relacionamentoOpt.isEmpty()) {
+            throw new NotFoundException();
+		}
+        relacionamentoRepository.deleteByIdUsuarioSeguidorIdAndIdUsuarioSeguidoId(idUsuarioSeguidor, idUsuarioSeguido);
 	}
 }
