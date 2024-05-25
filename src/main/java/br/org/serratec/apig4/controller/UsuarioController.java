@@ -20,48 +20,48 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.org.serratec.apig4.model.Postagem;
-import br.org.serratec.apig4.service.PostagemService;
+import br.org.serratec.apig4.model.Usuario;
+import br.org.serratec.apig4.service.UsuarioService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/postagem")
-public class PostagemController {
-
+@RequestMapping("/usuario")
+public class UsuarioController {
+	
 	@Autowired
-	PostagemService postagemService;
+	UsuarioService usuarioService;
 	
 	@GetMapping("/lista")
-	public ResponseEntity<Page<Postagem>> listar(@PageableDefault(sort="dataCriacao", direction=Sort.Direction.DESC,
+	public ResponseEntity<Page<Usuario>> listar(@PageableDefault(sort="nome", direction=Sort.Direction.ASC,
             page=0, size=10) Pageable pegeable) {
-		return ResponseEntity.ok(postagemService.listar(pegeable));
+		return ResponseEntity.ok(usuarioService.listar(pegeable));
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Postagem> buscar(@PathVariable Long id) {
-		return ResponseEntity.ok(postagemService.buscar(id));
+	public ResponseEntity<Usuario> buscar(@PathVariable Long id) {
+		return ResponseEntity.ok(usuarioService.buscar(id));
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Postagem> postar(@Valid @RequestBody Postagem postagem) {
-		postagemService.postar(postagem);
+	public ResponseEntity<Usuario> cadastrar(@Valid @RequestBody Usuario usuario) {
+		usuarioService.cadastrar(usuario);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
-				.buildAndExpand(postagem.getId())
+				.buildAndExpand(usuario.getId())
 				.toUri();
-		return ResponseEntity.created(uri).body(postagem);
+		return ResponseEntity.created(uri).body(usuario);
 	}
 	
 	@PutMapping("/editar/{id}")
-	public ResponseEntity<Postagem> editar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
-		return ResponseEntity.ok(postagemService.editar(id, postagem));
+	public ResponseEntity<Usuario> editar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
+		return ResponseEntity.ok(usuarioService.editar(id, usuario));
 	}
 	
 	@DeleteMapping("/deletar/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
-		postagemService.deletar(id);
+		usuarioService.deletar(id);
 		return ResponseEntity.noContent().build();
 	}
 }
