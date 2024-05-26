@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.org.serratec.apig4.dto.ComentarioDTO;
 import br.org.serratec.apig4.model.Comentario;
 import br.org.serratec.apig4.service.ComentarioService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/postagem/{postagemId}/comentarios")
@@ -48,7 +49,7 @@ public class ComentarioController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Comentario> inserir(@RequestBody ComentarioDTO comentarioDTO, @PathVariable Long postagemId) {
+	public ResponseEntity<Comentario> inserir(@Valid @RequestBody ComentarioDTO comentarioDTO, @PathVariable Long postagemId) {
 
 		comentarioService.inserir(comentarioDTO, postagemId);
 		
