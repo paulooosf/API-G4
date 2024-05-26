@@ -3,6 +3,7 @@ package br.org.serratec.apig4.dto;
 import java.time.LocalDate;
 
 import br.org.serratec.apig4.model.Usuario;
+import jakarta.validation.constraints.NotBlank;
 
 public class UsuarioDTO {
 
