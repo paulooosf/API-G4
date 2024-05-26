@@ -29,16 +29,17 @@ public class OpenAPIConfig {
 		Server prodServer = new Server();
 		prodServer.setUrl(prodUrl);
 		prodServer.setDescription("URL do servidor de produção");
-//
+
 		Contact contact = new Contact();
 		contact.setEmail("contato@grupo4.com.br");
-		contact.setName("Grupo4");
-		contact.setUrl("https://www.grupo4.com.br");
+		contact.setName("GitHub do projeto");
+		contact.setUrl("https://github.com/paulooosf/API-G4");
 
 		License apacheLicense = new License().name("Apache License").url("https://www.apache.org/license/LICENSE-2.0");
 
-		Info info = new Info().title("API de Teste").version("1.0").contact(contact)
-				.description("API para testes diversos").termsOfService("https://www.grupo4.com.br/termos")
+		Info info = new Info().title("API simples de Rede Social").version("1.0").contact(contact)
+				.description("API desenvolvida durante a disciplina de Desenvolvimento de API"
+						+ " Restful da Residência em TIC/Software do Serratec.").termsOfService("https://www.grupo4.com.br/termos")
 				.license(apacheLicense);
 
 		return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
