@@ -40,8 +40,7 @@ public class UsuarioController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioDTO> buscar(@PathVariable Long id) {
-		UsuarioDTO usuarioDTO = usuarioService.buscar(id);
-		return ResponseEntity.ok(usuarioDTO);
+		return ResponseEntity.ok(usuarioService.buscar(id));
 	}
 	
 	@PostMapping
@@ -57,9 +56,8 @@ public class UsuarioController {
 	}
 	
 	@PutMapping("/editar/{id}")
-	public ResponseEntity<UsuarioDTO> editar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
-			UsuarioDTO usuarioDTO = usuarioService.editar(id, usuario);
-		return ResponseEntity.ok(usuarioDTO);
+	public ResponseEntity<Usuario> editar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
+		return ResponseEntity.ok(usuarioService.editar(id, usuario));
 	}
 	
 	@DeleteMapping("/deletar/{id}")

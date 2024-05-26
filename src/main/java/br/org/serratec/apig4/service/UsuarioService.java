@@ -45,12 +45,13 @@ public class UsuarioService {
 		return new UsuarioDTO(usuario);
 	}
 
-	public UsuarioDTO editar(Long id, Usuario usuario) throws NotFoundException {
+	public Usuario editar(Long id, Usuario usuario) throws NotFoundException {
 		if (!usuarioRepository.existsById(id)) {
 			throw new NotFoundException();
 		}
 		usuario.setId(id);
-		return new UsuarioDTO(usuarioRepository.save(usuario));
+		usuario = usuarioRepository.save(usuario);
+		return usuario;
 	}
 
 	public void deletar(Long id) throws NotFoundException {
