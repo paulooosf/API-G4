@@ -1,9 +1,9 @@
 package br.org.serratec.apig4.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.org.serratec.apig4.dto.UsuarioDTO;
 import br.org.serratec.apig4.model.Usuario;
 import br.org.serratec.apig4.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -32,31 +33,33 @@ public class UsuarioController {
 	UsuarioService usuarioService;
 	
 	@GetMapping("/lista")
-	public ResponseEntity<Page<Usuario>> listar(@PageableDefault(sort="nome", direction=Sort.Direction.ASC,
+	public ResponseEntity<List<UsuarioDTO>> listar(@PageableDefault(sort="nome", direction=Sort.Direction.ASC,
             page=0, size=10) Pageable pegeable) {
 		return ResponseEntity.ok(usuarioService.listar(pegeable));
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> buscar(@PathVariable Long id) {
-		return ResponseEntity.ok(usuarioService.buscar(id));
+	public ResponseEntity<UsuarioDTO> buscar(@PathVariable Long id) {
+		UsuarioDTO usuarioDTO = usuarioService.buscar(id);
+		return ResponseEntity.ok(usuarioDTO);
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Usuario> cadastrar(@Valid @RequestBody Usuario usuario) {
-		usuarioService.cadastrar(usuario);
+	public ResponseEntity<UsuarioDTO> cadastrar(@Valid @RequestBody Usuario usuario) {
+		UsuarioDTO usuarioDTO = usuarioService.cadastrar(usuario);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
 				.buildAndExpand(usuario.getId())
 				.toUri();
-		return ResponseEntity.created(uri).body(usuario);
+		return ResponseEntity.created(uri).body(usuarioDTO);
 	}
 	
 	@PutMapping("/editar/{id}")
-	public ResponseEntity<Usuario> editar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
-		return ResponseEntity.ok(usuarioService.editar(id, usuario));
+	public ResponseEntity<UsuarioDTO> editar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
+			UsuarioDTO usuarioDTO = usuarioService.editar(id, usuario);
+		return ResponseEntity.ok(usuarioDTO);
 	}
 	
 	@DeleteMapping("/deletar/{id}")

@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -31,10 +32,10 @@ public class ConfigSeguranca {
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()).cors((cors) -> cors.configurationSource(corsConfigurationSource()))
 				.httpBasic(Customizer.withDefaults()).authorizeHttpRequests(requests -> {
-					requests.requestMatchers(HttpMethod.GET, "/usuario").permitAll();
-					requests.requestMatchers(HttpMethod.GET, "/relacionamentos").permitAll();
-					requests.requestMatchers(HttpMethod.GET, "/postagem").permitAll();
-					requests.requestMatchers(HttpMethod.GET, "/comentarios").permitAll().anyRequest().authenticated();
+					requests.requestMatchers(HttpMethod.GET, "/**").permitAll();
+					requests.requestMatchers(HttpMethod.POST, "/**").permitAll();
+					requests.requestMatchers(HttpMethod.PUT, "/**").permitAll();
+					requests.requestMatchers(HttpMethod.DELETE, "/**").permitAll().anyRequest().authenticated();
 				}).sessionManagement(session -> {
 					session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 				});
