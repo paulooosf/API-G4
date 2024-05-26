@@ -9,6 +9,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "usuario")
@@ -19,18 +22,23 @@ public class Usuario {
 	@Column(name = "id_usuario")
 	private Long id;
 	
+	@NotBlank(message = "Preencha o nome!")
 	@Column
 	private String nome;
 	
+	@NotBlank(message = "Preencha o sobrenome!")
 	@Column
 	private String sobrenome;
 	
+	@Email(message = "Preencha o email corretamente!")
 	@Column
 	private String email;
 	
+	@NotBlank(message = "Preencha a senha!")
 	@Column
 	private String senha;
 	
+	@NotNull(message = "Preencha a data de nascimento!")
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 
