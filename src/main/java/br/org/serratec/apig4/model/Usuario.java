@@ -23,23 +23,23 @@ public class Usuario {
 	private Long id;
 	
 	@NotBlank(message = "Preencha o nome!")
-	@Column
+	@Column(nullable = false)
 	private String nome;
 	
 	@NotBlank(message = "Preencha o sobrenome!")
-	@Column
+	@Column(nullable = false)
 	private String sobrenome;
 	
 	@Email(message = "Preencha o email corretamente!")
-	@Column
+	@Column(nullable = false)
 	private String email;
 	
 	@NotBlank(message = "Preencha a senha!")
-	@Column
+	@Column(nullable = false)
 	private String senha;
 	
 	@NotNull(message = "Preencha a data de nascimento!")
-	@Column(name = "data_nascimento")
+	@Column(name = "data_nascimento", nullable = false)
 	private LocalDate dataNascimento;
 
 	public Long getId() {

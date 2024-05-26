@@ -1,9 +1,9 @@
 package br.org.serratec.apig4.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -33,7 +33,7 @@ public class UsuarioController {
 	UsuarioService usuarioService;
 	
 	@GetMapping("/lista")
-	public ResponseEntity<List<UsuarioDTO>> listar(@PageableDefault(sort="nome", direction=Sort.Direction.ASC,
+	public ResponseEntity<Page<UsuarioDTO>> listar(@PageableDefault(sort="nome", direction=Sort.Direction.ASC,
             page=0, size=10) Pageable pegeable) {
 		return ResponseEntity.ok(usuarioService.listar(pegeable));
 	}
@@ -56,8 +56,13 @@ public class UsuarioController {
 	}
 	
 	@PutMapping("/editar/{id}")
-	public ResponseEntity<Usuario> editar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
+	public ResponseEntity<UsuarioDTO> editar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
 		return ResponseEntity.ok(usuarioService.editar(id, usuario));
+	}
+	
+	@PutMapping("/trocarsenha/{id}")
+	public ResponseEntity<UsuarioDTO> trocarSenha(@PathVariable Long id, @Valid @RequestBody String senha) {
+		return ResponseEntity.ok(usuarioService.trocarSenha(id, senha));
 	}
 	
 	@DeleteMapping("/deletar/{id}")
