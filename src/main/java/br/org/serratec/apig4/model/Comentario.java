@@ -19,13 +19,13 @@ public class Comentario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_comentario")
 	private Long id;
-	
+
 	@Column(name = "conteudo_comentario")
 	private String conteudoCom;
-	
+
 	@Column(name = "hora_criacao")
 	private LocalDateTime horaCriacao;
-	
+
 	@ManyToOne
 	private Postagem postagem;
 

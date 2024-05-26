@@ -22,40 +22,51 @@ import br.org.serratec.apig4.model.Comentario;
 import br.org.serratec.apig4.service.ComentarioService;
 
 @RestController
-@RequestMapping("/comentarios")
+@RequestMapping("/postagem/{postagemId}/comentarios")
 public class ComentarioController {
 
 	@Autowired
 	private ComentarioService comentarioService;
 
-	@GetMapping("/lista")
+	@GetMapping
 	public ResponseEntity<Page<Comentario>> listar(
-			@PageableDefault(sort = "horaCriacao", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pegeable) {
-		return ResponseEntity.ok(comentarioService.listar(pegeable));
+			@PageableDefault(
+					sort = "horaCriacao",
+					direction = Sort.Direction.DESC,
+					page = 0, size = 10)
+					Pageable pageable,
+			@PathVariable Long postagemId) {
+
+		return ResponseEntity.ok(comentarioService.listar(pageable, postagemId));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Comentario> buscarPorId(@PathVariable Long id) {
-		return ResponseEntity.ok(comentarioService.buscarPorId(id));
+	public ResponseEntity<Comentario> buscarPorId(@PathVariable Long id, @PathVariable Long postagemId) {
+		
+		return ResponseEntity.ok(comentarioService.buscarPorId(id, postagemId));
 	}
-	//("/postagem/{id}")
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Comentario> inserir(@RequestBody ComentarioDTO comentarioDTO 
-			//@PathVariable Long id
-			) {
-		comentarioService.inserir(comentarioDTO);
+	public ResponseEntity<Comentario> inserir(@RequestBody ComentarioDTO comentarioDTO, @PathVariable Long postagemId) {
+
+		comentarioService.inserir(comentarioDTO, postagemId);
+		
 		return ResponseEntity.ok().build();
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Comentario> editar(@PathVariable Long id, @RequestBody ComentarioDTO comentarioDTO) {
-		return ResponseEntity.ok(comentarioService.editar(id, comentarioDTO));
+	public ResponseEntity<Comentario> editar(@PathVariable Long id,
+			@RequestBody ComentarioDTO comentarioDTO,
+			@PathVariable Long postagemId) {
+		
+		return ResponseEntity.ok(comentarioService.editar(id, comentarioDTO, postagemId));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deletar(@PathVariable Long id) {
-		comentarioService.deletar(id);
+	public ResponseEntity<Void> deletar(@PathVariable Long id, @PathVariable Long postagemId) {
+		comentarioService.deletar(id, postagemId);
+		
 		return ResponseEntity.noContent().build();
 	}
 }

@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import br.org.serratec.apig4.dto.ComentarioDTO;
 import br.org.serratec.apig4.exception.NotFoundException;
 import br.org.serratec.apig4.model.Comentario;
+import br.org.serratec.apig4.model.Postagem;
 import br.org.serratec.apig4.repository.ComentarioRepository;
+import br.org.serratec.apig4.repository.PostagemRepository;
 
 @Service
 public class ComentarioService {
@@ -19,45 +21,63 @@ public class ComentarioService {
 	@Autowired
 	private ComentarioRepository comentarioRepository;
 
-	public Page<Comentario> listar(Pageable pegeable) {
-		return comentarioRepository.findAll(pegeable);
+	@Autowired
+	private PostagemRepository postagemRepository;
+
+	public Page<Comentario> listar(Pageable pageable, Long postagemId) {
+		
+		return comentarioRepository.findByPostagemId(pageable ,postagemId);
 	}
 
-	public Comentario buscarPorId(Long id) throws NotFoundException {
-		Optional<Comentario> comentarioOpt = comentarioRepository.findById(id);
+	public Comentario buscarPorId(Long id, Long postagemId) throws NotFoundException {
+		Optional<Comentario> comentarioOpt = comentarioRepository.findByIdAndPostagemId(id, postagemId);
 		if (comentarioOpt.isEmpty()) {
 			throw new NotFoundException();
 		}
+		if (!postagemRepository.existsById(postagemId)) {
+			throw new NotFoundException();
+		}
+
 		return comentarioOpt.get();
 	}
 
-	public Comentario inserir(ComentarioDTO comentarioDTO) {
-		
-		//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+	public Comentario inserir(ComentarioDTO comentarioDTO, Long postagemId) {
 
+		// DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 		Comentario comentario = new Comentario();
+		Optional<Postagem> postagemOpt = postagemRepository.findById(postagemId);
+
+		if (!postagemOpt.isPresent()) {
+			throw new NotFoundException();
+		}
+
 		comentario.setConteudoCom(comentarioDTO.getConteudoCom());
 		comentario.setHoraCriacao(LocalDateTime.now());
-		//comentario.getPostagem().setId(comentario.getPostagem().getId());
+		comentario.setPostagem(postagemOpt.get());
 
 		return comentarioRepository.save(comentario);
 	}
 
-	public Comentario editar(Long id, ComentarioDTO comentarioDTO) {
-		if (!comentarioRepository.existsById(id)) {
+	public Comentario editar(Long id, ComentarioDTO comentarioDTO, Long postagemId) {
+		Optional<Comentario> comentarioOpt = comentarioRepository.findByIdAndPostagemId(id, postagemId);
+
+		if (!comentarioOpt.isPresent()) {
 			throw new NotFoundException();
 		}
 
 		Comentario comentario = new Comentario();
-		comentario.setId(id);
 		comentario.setConteudoCom(comentarioDTO.getConteudoCom());
+		
 		return comentarioRepository.save(comentario);
 	}
 
-	public void deletar(Long id) throws NotFoundException {
-		if (!comentarioRepository.existsById(id)) {
+	public void deletar(Long id, Long postagemId) throws NotFoundException {
+		Optional<Comentario> comentarioOpt = comentarioRepository.findByIdAndPostagemId(id, postagemId);
+
+		if (!comentarioOpt.isPresent()) {
 			throw new NotFoundException();
 		}
+
 		comentarioRepository.deleteById(id);
 	}
 
