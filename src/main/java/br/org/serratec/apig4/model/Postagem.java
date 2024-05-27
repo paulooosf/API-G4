@@ -23,11 +23,11 @@ public class Postagem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_postagem")
 	private Long id;
-	
+
 	@NotBlank(message = "Preencha o conteúdo da postagem!")
 	@Column(nullable = false)
 	private String conteudo;
-	
+
 	@NotNull(message = "Preencha a data e hora da postagem! Formato correto: ano-mes-dia")
 	@Column(name = "hora_criacao")
 	private LocalDate dataCriacao;
@@ -38,7 +38,7 @@ public class Postagem {
 
 	@OneToMany(mappedBy = "postagem")
 	private List<Comentario> comentarios;
-	
+
 	public Long getId() {
 		return id;
 	}

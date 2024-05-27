@@ -44,7 +44,7 @@ public class UsuarioService {
 		usuario.setId(id);
 		return new UsuarioDTO(usuarioRepository.save(usuario));
 	}
-	
+
 	public UsuarioDTO trocarSenha(Long id, String senha) throws NotFoundException {
 		if (!usuarioRepository.existsById(id)) {
 			throw new NotFoundException();
@@ -53,7 +53,7 @@ public class UsuarioService {
 		Usuario usuario = usuarioOpt.get();
 		usuario.setSenha(senha);
 		usuarioRepository.save(usuario);
-		
+
 		return new UsuarioDTO(usuario);
 	}
 

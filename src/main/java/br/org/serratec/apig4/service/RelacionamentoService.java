@@ -26,8 +26,6 @@ public class RelacionamentoService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-	
-	//Lista todos os relacionamentos do banco
 	public List<RelacionamentoDTO> findAll() {
 		List<Relacionamento> relacionamentos = relacionamentoRepository.findAll();
 
@@ -40,7 +38,6 @@ public class RelacionamentoService {
 		return relacionamentoDTO;
 	}
 
-	//Lista todos os seguidores de um usuário
 	public List<Relacionamento> buscarSeguidoresByUsuarioId(Long id) {
 		List<Relacionamento> relacionamentos = relacionamentoRepository.buscarSeguidoresByUsuarioId(id);
 		if (relacionamentos.isEmpty()) {
@@ -50,18 +47,13 @@ public class RelacionamentoService {
 		return relacionamentos;
 	}
 
-	//Cria um novo relacionamento entre dois usuários
 	@Transactional
 	public RelacionamentoDTO inserir(RelacionamentoInserirDTO relacionamentoInserirDTO) {
-		// Armazena o iD
 		Optional<Usuario> seguidorOpt = usuarioRepository.findById(relacionamentoInserirDTO.getSeguidorId());
 		Optional<Usuario> seguidoOpt = usuarioRepository.findById(relacionamentoInserirDTO.getSeguidoId());
 
-		// Cria uma instância de Relacionamento
 		Relacionamento relacionamento = new Relacionamento();
 
-		// Chama essa instância e insere os dados armazenados em seguidorOpt e
-		// seguidoOpt
 		relacionamento.getId().setUsuarioSeguidor(seguidorOpt.get());
 		relacionamento.getId().setUsuarioSeguido(seguidoOpt.get());
 		relacionamento.setDataInicio(LocalDate.now());
@@ -71,14 +63,14 @@ public class RelacionamentoService {
 		RelacionamentoDTO relacionamentoDTO = new RelacionamentoDTO(relacionamento);
 		return relacionamentoDTO;
 	}
-	
-	//Desfaz amizade / Deixa de seguir
+
 	@Transactional
 	public void deletar(Long idUsuarioSeguidor, Long idUsuarioSeguido) {
-        Optional<Relacionamento> relacionamentoOpt = relacionamentoRepository.findByIdUsuarioSeguidorIdAndIdUsuarioSeguidoId(idUsuarioSeguidor, idUsuarioSeguido);
+		Optional<Relacionamento> relacionamentoOpt = relacionamentoRepository
+				.findByIdUsuarioSeguidorIdAndIdUsuarioSeguidoId(idUsuarioSeguidor, idUsuarioSeguido);
 		if (relacionamentoOpt.isEmpty()) {
-            throw new NotFoundException();
+			throw new NotFoundException();
 		}
-        relacionamentoRepository.deleteByIdUsuarioSeguidorIdAndIdUsuarioSeguidoId(idUsuarioSeguidor, idUsuarioSeguido);
+		relacionamentoRepository.deleteByIdUsuarioSeguidorIdAndIdUsuarioSeguidoId(idUsuarioSeguidor, idUsuarioSeguido);
 	}
 }

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import br.org.serratec.apig4.model.Postagem;
 
 @Repository
-public interface PostagemRepository extends JpaRepository<Postagem, Long>{
+public interface PostagemRepository extends JpaRepository<Postagem, Long> {
 
 }

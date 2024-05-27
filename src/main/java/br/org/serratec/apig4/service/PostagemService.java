@@ -13,14 +13,14 @@ import br.org.serratec.apig4.repository.PostagemRepository;
 
 @Service
 public class PostagemService {
-	
+
 	@Autowired
 	private PostagemRepository postagemRepository;
-	
+
 	public Page<Postagem> listar(Pageable pegeable) {
 		return postagemRepository.findAll(pegeable);
 	}
-	
+
 	public Postagem buscar(Long id) throws NotFoundException {
 		Optional<Postagem> postagemOpt = postagemRepository.findById(id);
 		if (postagemOpt.isEmpty()) {
@@ -28,11 +28,11 @@ public class PostagemService {
 		}
 		return postagemOpt.get();
 	}
-	
+
 	public Postagem postar(Postagem postagem) {
 		return postagemRepository.save(postagem);
 	}
-	
+
 	public Postagem editar(Long id, Postagem postagem) throws NotFoundException {
 		if (!postagemRepository.existsById(id)) {
 			throw new NotFoundException();
@@ -41,7 +41,7 @@ public class PostagemService {
 		postagem = postagemRepository.save(postagem);
 		return postagem;
 	}
-	
+
 	public void deletar(Long id) throws NotFoundException {
 		if (!postagemRepository.existsById(id)) {
 			throw new NotFoundException();

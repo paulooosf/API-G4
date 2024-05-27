@@ -31,11 +31,7 @@ public class ComentarioController {
 
 	@GetMapping
 	public ResponseEntity<Page<Comentario>> listar(
-			@PageableDefault(
-					sort = "horaCriacao",
-					direction = Sort.Direction.DESC,
-					page = 0, size = 10)
-					Pageable pageable,
+			@PageableDefault(sort = "horaCriacao", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable,
 			@PathVariable Long postagemId) {
 
 		return ResponseEntity.ok(comentarioService.listar(pageable, postagemId));
@@ -43,30 +39,30 @@ public class ComentarioController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Comentario> buscarPorId(@PathVariable Long id, @PathVariable Long postagemId) {
-		
+
 		return ResponseEntity.ok(comentarioService.buscarPorId(id, postagemId));
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Comentario> inserir(@Valid @RequestBody ComentarioDTO comentarioDTO, @PathVariable Long postagemId, Long usuarioId) {
+	public ResponseEntity<Comentario> inserir(@Valid @RequestBody ComentarioDTO comentarioDTO,
+			@PathVariable Long postagemId, Long usuarioId) {
 
 		comentarioService.inserir(comentarioDTO, postagemId, usuarioId);
 		return ResponseEntity.ok().build();
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Comentario> editar(@PathVariable Long id,
-			@RequestBody ComentarioDTO comentarioDTO,
+	public ResponseEntity<Comentario> editar(@PathVariable Long id, @RequestBody ComentarioDTO comentarioDTO,
 			@PathVariable Long postagemId) {
-		
+
 		return ResponseEntity.ok(comentarioService.editar(id, comentarioDTO, postagemId));
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id, @PathVariable Long postagemId) {
 		comentarioService.deletar(id, postagemId);
-		
+
 		return ResponseEntity.noContent().build();
 	}
 }

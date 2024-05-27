@@ -14,14 +14,14 @@ import br.org.serratec.apig4.model.RelacionamentoPK;
 @Repository
 public interface RelacionamentoRepository extends JpaRepository<Relacionamento, RelacionamentoPK> {
 
-	@Query(value = "Select * from relacionamento r where r.id_usuario_seguido = :id",
-			nativeQuery = true)
+	@Query(value = "Select * from relacionamento r where r.id_usuario_seguido = :id", nativeQuery = true)
 	List<Relacionamento> buscarSeguidoresByUsuarioId(@Param(value = "id") Long id);
-	
-    Optional<Relacionamento> findByIdUsuarioSeguidorIdAndIdUsuarioSeguidoId(Long idUsuarioSeguidor, Long idUsuarioSeguido);
-	
-    void deleteByIdUsuarioSeguidorIdAndIdUsuarioSeguidoId(Long idUsuarioSeguidor, Long idUsuarioSeguido);
-    
-    boolean existsById(RelacionamentoPK id);
-    
+
+	Optional<Relacionamento> findByIdUsuarioSeguidorIdAndIdUsuarioSeguidoId(Long idUsuarioSeguidor,
+			Long idUsuarioSeguido);
+
+	void deleteByIdUsuarioSeguidorIdAndIdUsuarioSeguidoId(Long idUsuarioSeguidor, Long idUsuarioSeguido);
+
+	boolean existsById(RelacionamentoPK id);
+
 }

@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
@@ -30,7 +31,7 @@ public class Comentario {
 
 	@ManyToOne
 	private Postagem postagem;
-	
+
 	@ManyToOne
 	private Usuario usuario;
 
@@ -65,7 +66,7 @@ public class Comentario {
 	public void setPostagem(Postagem postagem) {
 		this.postagem = postagem;
 	}
-	
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -102,6 +103,11 @@ public class Comentario {
 			return false;
 		Comentario other = (Comentario) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@PrePersist
+	protected void onCreate() {
+		horaCriacao = LocalDateTime.now();
 	}
 
 }

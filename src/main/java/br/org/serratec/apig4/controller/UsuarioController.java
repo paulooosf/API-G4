@@ -28,43 +28,40 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
-	
+
 	@Autowired
 	UsuarioService usuarioService;
-	
+
 	@GetMapping("/lista")
-	public ResponseEntity<Page<UsuarioDTO>> listar(@PageableDefault(sort="nome", direction=Sort.Direction.ASC,
-            page=0, size=10) Pageable pegeable) {
+	public ResponseEntity<Page<UsuarioDTO>> listar(
+			@PageableDefault(sort = "nome", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pegeable) {
 		return ResponseEntity.ok(usuarioService.listar(pegeable));
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioDTO> buscar(@PathVariable Long id) {
 		return ResponseEntity.ok(usuarioService.buscar(id));
 	}
-	
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<UsuarioDTO> cadastrar(@Valid @RequestBody Usuario usuario) {
 		UsuarioDTO usuarioDTO = usuarioService.cadastrar(usuario);
-		URI uri = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(usuario.getId())
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuario.getId())
 				.toUri();
 		return ResponseEntity.created(uri).body(usuarioDTO);
 	}
-	
+
 	@PutMapping("/editar/{id}")
 	public ResponseEntity<UsuarioDTO> editar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
 		return ResponseEntity.ok(usuarioService.editar(id, usuario));
 	}
-	
+
 	@PutMapping("/trocarsenha/{id}")
 	public ResponseEntity<UsuarioDTO> trocarSenha(@PathVariable Long id, @Valid @RequestBody String senha) {
 		return ResponseEntity.ok(usuarioService.trocarSenha(id, senha));
 	}
-	
+
 	@DeleteMapping("/deletar/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
 		usuarioService.deletar(id);

@@ -23,27 +23,27 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_usuario")
 	private Long id;
-	
+
 	@NotBlank(message = "Preencha o nome!")
 	@Column(nullable = false)
 	private String nome;
-	
+
 	@NotBlank(message = "Preencha o sobrenome!")
 	@Column(nullable = false)
 	private String sobrenome;
-	
+
 	@Email(message = "Preencha o email corretamente!")
 	@Column(nullable = false)
 	private String email;
-	
+
 	@NotBlank(message = "Preencha a senha!")
 	@Column(nullable = false)
 	private String senha;
-	
+
 	@NotNull(message = "Preencha a data de nascimento!")
 	@Column(name = "data_nascimento", nullable = false)
 	private LocalDate dataNascimento;
-	
+
 	@OneToMany(mappedBy = "usuario")
 	private List<Comentario> comentario;
 
@@ -107,7 +107,8 @@ public class Usuario {
 
 	}
 
-	public Usuario(Long id, String nome, String sobrenome, String email, String senha, LocalDate dataNascimento, List<Comentario> comentario) {
+	public Usuario(Long id, String nome, String sobrenome, String email, String senha, LocalDate dataNascimento,
+			List<Comentario> comentario) {
 		super();
 		this.id = id;
 		this.nome = nome;

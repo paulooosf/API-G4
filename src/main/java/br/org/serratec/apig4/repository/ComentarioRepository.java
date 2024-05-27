@@ -13,7 +13,7 @@ import br.org.serratec.apig4.model.Comentario;
 public interface ComentarioRepository extends JpaRepository<Comentario, Long> {
 
 	Page<Comentario> findByPostagemId(Pageable pageable, Long postagemId);
-	
+
 	Optional<Comentario> findByIdAndPostagemId(Long id, Long postagemId);
 
 }

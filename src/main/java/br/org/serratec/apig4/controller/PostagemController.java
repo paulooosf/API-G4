@@ -30,35 +30,32 @@ public class PostagemController {
 
 	@Autowired
 	PostagemService postagemService;
-	
+
 	@GetMapping("/lista")
-	public ResponseEntity<Page<Postagem>> listar(@PageableDefault(sort="dataCriacao", direction=Sort.Direction.DESC,
-            page=0, size=10) Pageable pegeable) {
+	public ResponseEntity<Page<Postagem>> listar(
+			@PageableDefault(sort = "dataCriacao", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pegeable) {
 		return ResponseEntity.ok(postagemService.listar(pegeable));
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Postagem> buscar(@PathVariable Long id) {
 		return ResponseEntity.ok(postagemService.buscar(id));
 	}
-	
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Postagem> postar(@Valid @RequestBody Postagem postagem) {
 		postagemService.postar(postagem);
-		URI uri = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(postagem.getId())
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(postagem.getId())
 				.toUri();
 		return ResponseEntity.created(uri).body(postagem);
 	}
-	
+
 	@PutMapping("/editar/{id}")
 	public ResponseEntity<Postagem> editar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
 		return ResponseEntity.ok(postagemService.editar(id, postagem));
 	}
-	
+
 	@DeleteMapping("/deletar/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
 		postagemService.deletar(id);

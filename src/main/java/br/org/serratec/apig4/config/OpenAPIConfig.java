@@ -39,8 +39,8 @@ public class OpenAPIConfig {
 
 		Info info = new Info().title("API simples de Rede Social").version("1.0").contact(contact)
 				.description("API desenvolvida durante a disciplina de Desenvolvimento de API"
-						+ " Restful da Residência em TIC/Software do Serratec.").termsOfService("https://www.grupo4.com.br/termos")
-				.license(apacheLicense);
+						+ " Restful da Residência em TIC/Software do Serratec.")
+				.termsOfService("https://www.grupo4.com.br/termos").license(apacheLicense);
 
 		return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
 	}
