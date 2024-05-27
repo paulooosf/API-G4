@@ -38,7 +38,7 @@ public class ConfigSeguranca {
 
 	@Bean
 	InMemoryUserDetailsManager userDetailService() {
-		UserDetails user = User.withDefaultPasswordEncoder().username("teste").password("123456").build();
+		UserDetails user = User.withDefaultPasswordEncoder().username("Pedro").password("123456").build();
 		return new InMemoryUserDetailsManager(user);
 	}
 
