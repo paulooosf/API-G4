@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.org.serratec.apig4.dto.ComentarioDTO;
+import br.org.serratec.apig4.dto.ComentarioInserirDTO;
+import br.org.serratec.apig4.dto.ComentarioResponseDTO;
+import br.org.serratec.apig4.exception.NotFoundException;
 import br.org.serratec.apig4.model.Comentario;
 import br.org.serratec.apig4.service.ComentarioService;
 import jakarta.validation.Valid;
@@ -30,39 +33,63 @@ public class ComentarioController {
 	private ComentarioService comentarioService;
 
 	@GetMapping
-	public ResponseEntity<Page<Comentario>> listar(
+	public ResponseEntity<Page<ComentarioResponseDTO>> listar(
 			@PageableDefault(sort = "horaCriacao", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable,
 			@PathVariable Long postagemId) {
-
-		return ResponseEntity.ok(comentarioService.listar(pageable, postagemId));
+		
+		Page<Comentario> comentarioPage = comentarioService.listar(pageable, postagemId); 
+		Page<ComentarioResponseDTO> comentariosDTOPage = comentarioPage.map(ComentarioResponseDTO::new);
+		
+		return ResponseEntity.ok().body(comentariosDTOPage);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Comentario> buscarPorId(@PathVariable Long id, @PathVariable Long postagemId) {
+	public ResponseEntity<ComentarioResponseDTO> buscarPorId(@PathVariable Long id, @PathVariable Long postagemId) {
 
-		return ResponseEntity.ok(comentarioService.buscarPorId(id, postagemId));
+		 try {
+			 ComentarioResponseDTO comentarioResponseDTO = new ComentarioResponseDTO(comentarioService.buscarPorId(id, postagemId)); 
+			 return ResponseEntity.ok().body(comentarioResponseDTO);
+		       
+		    } catch (NotFoundException e) {
+		        return ResponseEntity.notFound().build();
+		    }
+		
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Comentario> inserir(@Valid @RequestBody ComentarioDTO comentarioDTO,
-			@PathVariable Long postagemId, Long usuarioId) {
+	public ResponseEntity<ComentarioResponseDTO> inserir(@Valid @RequestBody ComentarioInserirDTO comentarioInserirDTO,
+			@PathVariable Long postagemId) {
 
-		comentarioService.inserir(comentarioDTO, postagemId, usuarioId);
-		return ResponseEntity.ok().build();
+		Comentario comentario = comentarioService.inserir(comentarioInserirDTO, postagemId);
+		ComentarioResponseDTO responseDTO = new ComentarioResponseDTO(comentario);
+
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Comentario> editar(@PathVariable Long id, @RequestBody ComentarioDTO comentarioDTO,
+	public ResponseEntity<ComentarioResponseDTO> editar(@PathVariable Long id, @RequestBody ComentarioDTO comentarioDTO,
 			@PathVariable Long postagemId) {
+		try {
+		comentarioService.editar(id, comentarioDTO, postagemId);
+		
+		Comentario comentario = comentarioService.editar(id, comentarioDTO, postagemId);
+		ComentarioResponseDTO responseDTO = new ComentarioResponseDTO(comentario);
 
-		return ResponseEntity.ok(comentarioService.editar(id, comentarioDTO, postagemId));
+		return ResponseEntity.ok().body(responseDTO);
+		
+		} catch (NotFoundException e) {
+	        return ResponseEntity.notFound().build();
+	    }
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id, @PathVariable Long postagemId) {
-		comentarioService.deletar(id, postagemId);
-
-		return ResponseEntity.noContent().build();
+		try {
+			comentarioService.deletar(id, postagemId);
+	        return ResponseEntity.noContent().build();
+	    } catch (NotFoundException e) {
+	        return ResponseEntity.notFound().build();
+	    }
 	}
 }
