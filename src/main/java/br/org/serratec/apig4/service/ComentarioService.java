@@ -9,15 +9,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.org.serratec.apig4.dto.ComentarioDTO;
+import br.org.serratec.apig4.dto.ComentarioInserirDTO;
 import br.org.serratec.apig4.exception.NotFoundException;
-import br.org.serratec.apig4.exception.UnauthorizedException;
 import br.org.serratec.apig4.model.Comentario;
 import br.org.serratec.apig4.model.Postagem;
-import br.org.serratec.apig4.model.RelacionamentoPK;
 import br.org.serratec.apig4.model.Usuario;
 import br.org.serratec.apig4.repository.ComentarioRepository;
 import br.org.serratec.apig4.repository.PostagemRepository;
-import br.org.serratec.apig4.repository.RelacionamentoRepository;
 import br.org.serratec.apig4.repository.UsuarioRepository;
 
 @Service
@@ -30,14 +28,11 @@ public class ComentarioService {
 	private PostagemRepository postagemRepository;
 
 	@Autowired
-	private UsuarioRepository usuarioRepository;
-
-	@Autowired
-	private RelacionamentoRepository relacionamentoRepository;
+	private UsuarioRepository usuarioRepository;;
 
 	public Page<Comentario> listar(Pageable pageable, Long postagemId) {
 
-		return comentarioRepository.findByPostagemId(pageable, postagemId);
+		return comentarioRepository.findAllByPostagemId(pageable, postagemId);
 	}
 
 	public Comentario buscarPorId(Long id, Long postagemId) throws NotFoundException {
@@ -53,9 +48,11 @@ public class ComentarioService {
 		return comentarioOpt.get();
 	}
 
-	public Comentario inserir(ComentarioDTO comentarioDTO, Long postagemId, Long usuarioId) {
+	public Comentario inserir(ComentarioInserirDTO comentarioInserirDTO, Long postagemId) {
+
+		Long autorId = comentarioInserirDTO.getAutorId();
 		Optional<Postagem> postagemOpt = postagemRepository.findById(postagemId);
-		Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
+		Optional<Usuario> usuarioOpt = usuarioRepository.findById(autorId);
 
 		Comentario comentario = new Comentario();
 
@@ -66,19 +63,7 @@ public class ComentarioService {
 			throw new NotFoundException();
 		}
 
-		Postagem postagem = postagemOpt.get();
-		Usuario usuario = usuarioOpt.get();
-		Usuario usuarioPostagem = postagem.getAutor();
-		RelacionamentoPK relacionamentoPK = new RelacionamentoPK();
-
-		relacionamentoPK.setUsuarioSeguido(usuarioPostagem);
-		relacionamentoPK.setUsuarioSeguidor(usuario);
-
-		if (!relacionamentoRepository.existsById(relacionamentoPK)) {
-			throw new UnauthorizedException("Apenas seguidores podem comentar nesta postagem");
-		}
-
-		comentario.setConteudoCom(comentarioDTO.getConteudoCom());
+		comentario.setConteudoCom(comentarioInserirDTO.getConteudoCom());
 		comentario.setHoraCriacao(LocalDateTime.now());
 		comentario.setPostagem(postagemOpt.get());
 		comentario.setUsuario(usuarioOpt.get());
@@ -87,13 +72,15 @@ public class ComentarioService {
 	}
 
 	public Comentario editar(Long id, ComentarioDTO comentarioDTO, Long postagemId) {
+
 		Optional<Comentario> comentarioOpt = comentarioRepository.findByIdAndPostagemId(id, postagemId);
 
 		if (!comentarioOpt.isPresent()) {
 			throw new NotFoundException();
 		}
 
-		Comentario comentario = new Comentario();
+		Comentario comentario = comentarioOpt.get();
+		comentario.setHoraCriacao(LocalDateTime.now());
 		comentario.setConteudoCom(comentarioDTO.getConteudoCom());
 
 		return comentarioRepository.save(comentario);
