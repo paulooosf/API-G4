@@ -1,6 +1,7 @@
 package br.org.serratec.apig4.model;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -8,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -41,6 +43,9 @@ public class Usuario {
 	@NotNull(message = "Preencha a data de nascimento!")
 	@Column(name = "data_nascimento", nullable = false)
 	private LocalDate dataNascimento;
+	
+	@OneToMany(mappedBy = "usuario")
+	private List<Comentario> comentario;
 
 	public Long getId() {
 		return id;
@@ -90,11 +95,19 @@ public class Usuario {
 		this.dataNascimento = dataNascimento;
 	}
 
+	public List<Comentario> getComentario() {
+		return comentario;
+	}
+
+	public void setComentario(List<Comentario> comentario) {
+		this.comentario = comentario;
+	}
+
 	public Usuario() {
 
 	}
 
-	public Usuario(Long id, String nome, String sobrenome, String email, String senha, LocalDate dataNascimento) {
+	public Usuario(Long id, String nome, String sobrenome, String email, String senha, LocalDate dataNascimento, List<Comentario> comentario) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -102,6 +115,7 @@ public class Usuario {
 		this.email = email;
 		this.senha = senha;
 		this.dataNascimento = dataNascimento;
+		this.comentario = comentario;
 	}
 
 	@Override

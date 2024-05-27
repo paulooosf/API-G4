@@ -49,9 +49,9 @@ public class ComentarioController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Comentario> inserir(@Valid @RequestBody ComentarioDTO comentarioDTO, @PathVariable Long postagemId) {
+	public ResponseEntity<Comentario> inserir(@Valid @RequestBody ComentarioDTO comentarioDTO, @PathVariable Long postagemId, Long usuarioId) {
 
-		comentarioService.inserir(comentarioDTO, postagemId);
+		comentarioService.inserir(comentarioDTO, postagemId, usuarioId);
 		
 		return ResponseEntity.ok().build();
 	}

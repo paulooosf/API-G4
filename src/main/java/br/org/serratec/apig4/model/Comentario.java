@@ -30,6 +30,9 @@ public class Comentario {
 
 	@ManyToOne
 	private Postagem postagem;
+	
+	@ManyToOne
+	private Usuario usuario;
 
 	public Long getId() {
 		return id;
@@ -62,17 +65,26 @@ public class Comentario {
 	public void setPostagem(Postagem postagem) {
 		this.postagem = postagem;
 	}
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 
 	public Comentario() {
 
 	}
 
-	public Comentario(Long id, String conteudoCom, LocalDateTime horaCriacao, Postagem postagem) {
+	public Comentario(Long id, String conteudoCom, LocalDateTime horaCriacao, Postagem postagem, Usuario usuario) {
 		super();
 		this.id = id;
 		this.conteudoCom = conteudoCom;
 		this.horaCriacao = horaCriacao;
 		this.postagem = postagem;
+		this.usuario = usuario;
 	}
 
 	@Override

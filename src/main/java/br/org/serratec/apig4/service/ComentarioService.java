@@ -12,8 +12,10 @@ import br.org.serratec.apig4.dto.ComentarioDTO;
 import br.org.serratec.apig4.exception.NotFoundException;
 import br.org.serratec.apig4.model.Comentario;
 import br.org.serratec.apig4.model.Postagem;
+import br.org.serratec.apig4.model.Usuario;
 import br.org.serratec.apig4.repository.ComentarioRepository;
 import br.org.serratec.apig4.repository.PostagemRepository;
+import br.org.serratec.apig4.repository.UsuarioRepository;
 
 @Service
 public class ComentarioService {
@@ -23,6 +25,9 @@ public class ComentarioService {
 
 	@Autowired
 	private PostagemRepository postagemRepository;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	public Page<Comentario> listar(Pageable pageable, Long postagemId) {
 		
@@ -31,6 +36,7 @@ public class ComentarioService {
 
 	public Comentario buscarPorId(Long id, Long postagemId) throws NotFoundException {
 		Optional<Comentario> comentarioOpt = comentarioRepository.findByIdAndPostagemId(id, postagemId);
+		
 		if (comentarioOpt.isEmpty()) {
 			throw new NotFoundException();
 		}
@@ -41,26 +47,31 @@ public class ComentarioService {
 		return comentarioOpt.get();
 	}
 
-	public Comentario inserir(ComentarioDTO comentarioDTO, Long postagemId) {
-
+	public Comentario inserir(ComentarioDTO comentarioDTO, Long postagemId, Long usuarioId) {
 		// DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-		Comentario comentario = new Comentario();
 		Optional<Postagem> postagemOpt = postagemRepository.findById(postagemId);
-
+		Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
+		
+		Comentario comentario = new Comentario();
+		
 		if (!postagemOpt.isPresent()) {
 			throw new NotFoundException();
 		}
-
+		if (!usuarioOpt.isPresent()) {
+			throw new NotFoundException();
+		}
+		
 		comentario.setConteudoCom(comentarioDTO.getConteudoCom());
 		comentario.setHoraCriacao(LocalDateTime.now());
 		comentario.setPostagem(postagemOpt.get());
+		comentario.setUsuario(usuarioOpt.get());
 
 		return comentarioRepository.save(comentario);
 	}
 
 	public Comentario editar(Long id, ComentarioDTO comentarioDTO, Long postagemId) {
 		Optional<Comentario> comentarioOpt = comentarioRepository.findByIdAndPostagemId(id, postagemId);
-
+		
 		if (!comentarioOpt.isPresent()) {
 			throw new NotFoundException();
 		}
