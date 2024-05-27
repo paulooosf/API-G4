@@ -2,7 +2,6 @@ package br.org.serratec.apig4.config;
 
 import java.util.Arrays;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,23 +17,18 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import br.org.serratec.apig4.security.JwtUtil;
-
 @Configuration
 @EnableWebSecurity
 public class ConfigSeguranca {
-
-	@Autowired
-	JwtUtil jwtUtil;
 
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()).cors((cors) -> cors.configurationSource(corsConfigurationSource()))
 				.httpBasic(Customizer.withDefaults()).authorizeHttpRequests(requests -> {
-					requests.requestMatchers(HttpMethod.GET, "/**").permitAll();
-					requests.requestMatchers(HttpMethod.POST, "/**").permitAll();
-					requests.requestMatchers(HttpMethod.PUT, "/**").permitAll();
-					requests.requestMatchers(HttpMethod.DELETE, "/**").permitAll().anyRequest().authenticated();
+					requests.requestMatchers(HttpMethod.GET, "/usuario").permitAll();
+					requests.requestMatchers(HttpMethod.GET, "/relacionamentos").permitAll();
+					requests.requestMatchers(HttpMethod.GET, "/postagem").permitAll();
+					requests.requestMatchers(HttpMethod.GET, "/comentarios").permitAll().anyRequest().authenticated();
 				}).sessionManagement(session -> {
 					session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 				});

@@ -33,7 +33,7 @@ public class RelacionamentoController {
 	private RelacionamentoService relacionamentoService;
 
 	@GetMapping
-	@Operation(summary = "Lista todas as postagens", description = "A resposta da requisição irá listar todas as postagens")
+	@Operation(summary = "Lista todos os relacionamentos", description = "A resposta da requisição irá listar todos os relacionamentos")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", content = {
 			@Content(schema = @Schema(implementation = Relacionamento.class), mediaType = "apllication/json") }),
 			@ApiResponse(responseCode = "401", description = "Erro de autenticação"),
@@ -55,7 +55,7 @@ public class RelacionamentoController {
 	}
 
 	@PostMapping
-	@Operation(summary = "Insere um relacionamento", description = "A resposta da requisição irá listar todos os relacionamentos")
+	@Operation(summary = "Insere um relacionamento", description = "A requisição irá gerar um novo relacionamento")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", content = {
 			@Content(schema = @Schema(implementation = Relacionamento.class), mediaType = "apllication/json") }),
 			@ApiResponse(responseCode = "401", description = "Erro de autenticação"),
@@ -67,7 +67,7 @@ public class RelacionamentoController {
 	}
 
 	@DeleteMapping("/{idUsuarioSeguidor}/{idUsuarioSeguido}")
-	@Operation(summary = "Deleta um relacionamento", description = "A resposta da requisição irá apagar um relacionamento")
+	@Operation(summary = "Deleta um relacionamento", description = "A requisição irá apagar um relacionamento")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", content = {
 			@Content(schema = @Schema(implementation = Relacionamento.class), mediaType = "apllication/json") }),
 			@ApiResponse(responseCode = "401", description = "Erro de autenticação"),

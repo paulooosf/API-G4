@@ -3,6 +3,8 @@ package br.org.serratec.apig4.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -16,6 +18,7 @@ public class Relacionamento {
 	private RelacionamentoPK id = new RelacionamentoPK();
 
 	@Column(name = "data_inicio")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate dataInicio;
 
 	public RelacionamentoPK getId() {

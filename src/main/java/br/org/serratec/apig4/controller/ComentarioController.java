@@ -36,24 +36,25 @@ public class ComentarioController {
 	public ResponseEntity<Page<ComentarioResponseDTO>> listar(
 			@PageableDefault(sort = "horaCriacao", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable,
 			@PathVariable Long postagemId) {
-		
-		Page<Comentario> comentarioPage = comentarioService.listar(pageable, postagemId); 
+
+		Page<Comentario> comentarioPage = comentarioService.listar(pageable, postagemId);
 		Page<ComentarioResponseDTO> comentariosDTOPage = comentarioPage.map(ComentarioResponseDTO::new);
-		
+
 		return ResponseEntity.ok().body(comentariosDTOPage);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ComentarioResponseDTO> buscarPorId(@PathVariable Long id, @PathVariable Long postagemId) {
 
-		 try {
-			 ComentarioResponseDTO comentarioResponseDTO = new ComentarioResponseDTO(comentarioService.buscarPorId(id, postagemId)); 
-			 return ResponseEntity.ok().body(comentarioResponseDTO);
-		       
-		    } catch (NotFoundException e) {
-		        return ResponseEntity.notFound().build();
-		    }
-		
+		try {
+			ComentarioResponseDTO comentarioResponseDTO = new ComentarioResponseDTO(
+					comentarioService.buscarPorId(id, postagemId));
+			return ResponseEntity.ok().body(comentarioResponseDTO);
+
+		} catch (NotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+
 	}
 
 	@PostMapping
@@ -71,25 +72,25 @@ public class ComentarioController {
 	public ResponseEntity<ComentarioResponseDTO> editar(@PathVariable Long id, @RequestBody ComentarioDTO comentarioDTO,
 			@PathVariable Long postagemId) {
 		try {
-		comentarioService.editar(id, comentarioDTO, postagemId);
-		
-		Comentario comentario = comentarioService.editar(id, comentarioDTO, postagemId);
-		ComentarioResponseDTO responseDTO = new ComentarioResponseDTO(comentario);
+			comentarioService.editar(id, comentarioDTO, postagemId);
 
-		return ResponseEntity.ok().body(responseDTO);
-		
+			Comentario comentario = comentarioService.editar(id, comentarioDTO, postagemId);
+			ComentarioResponseDTO responseDTO = new ComentarioResponseDTO(comentario);
+
+			return ResponseEntity.ok().body(responseDTO);
+
 		} catch (NotFoundException e) {
-	        return ResponseEntity.notFound().build();
-	    }
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id, @PathVariable Long postagemId) {
 		try {
 			comentarioService.deletar(id, postagemId);
-	        return ResponseEntity.noContent().build();
-	    } catch (NotFoundException e) {
-	        return ResponseEntity.notFound().build();
-	    }
+			return ResponseEntity.noContent().build();
+		} catch (NotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }
