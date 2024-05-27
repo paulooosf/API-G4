@@ -52,7 +52,6 @@ public class ComentarioController {
 	public ResponseEntity<Comentario> inserir(@Valid @RequestBody ComentarioDTO comentarioDTO, @PathVariable Long postagemId, Long usuarioId) {
 
 		comentarioService.inserir(comentarioDTO, postagemId, usuarioId);
-		
 		return ResponseEntity.ok().build();
 	}
 

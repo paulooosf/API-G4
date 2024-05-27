@@ -10,11 +10,14 @@ import org.springframework.stereotype.Service;
 
 import br.org.serratec.apig4.dto.ComentarioDTO;
 import br.org.serratec.apig4.exception.NotFoundException;
+import br.org.serratec.apig4.exception.UnauthorizedException;
 import br.org.serratec.apig4.model.Comentario;
 import br.org.serratec.apig4.model.Postagem;
+import br.org.serratec.apig4.model.RelacionamentoPK;
 import br.org.serratec.apig4.model.Usuario;
 import br.org.serratec.apig4.repository.ComentarioRepository;
 import br.org.serratec.apig4.repository.PostagemRepository;
+import br.org.serratec.apig4.repository.RelacionamentoRepository;
 import br.org.serratec.apig4.repository.UsuarioRepository;
 
 @Service
@@ -28,6 +31,9 @@ public class ComentarioService {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private RelacionamentoRepository relacionamentoRepository;
 
 	public Page<Comentario> listar(Pageable pageable, Long postagemId) {
 		
@@ -54,11 +60,24 @@ public class ComentarioService {
 		
 		Comentario comentario = new Comentario();
 		
+		
 		if (!postagemOpt.isPresent()) {
 			throw new NotFoundException();
 		}
 		if (!usuarioOpt.isPresent()) {
 			throw new NotFoundException();
+		}
+		
+		Postagem postagem = postagemOpt.get();
+		Usuario usuario = usuarioOpt.get();
+		Usuario usuarioPostagem = postagem.getAutor();
+		RelacionamentoPK relacionamentoPK = new RelacionamentoPK();
+		
+		relacionamentoPK.setUsuarioSeguido(usuarioPostagem);
+		relacionamentoPK.setUsuarioSeguidor(usuario);
+		
+		if (!relacionamentoRepository.existsById(relacionamentoPK)) {
+			throw new UnauthorizedException("Apenas seguidores podem comentar nesta postagem");
 		}
 		
 		comentario.setConteudoCom(comentarioDTO.getConteudoCom());

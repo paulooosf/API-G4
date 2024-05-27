@@ -21,4 +21,7 @@ public interface RelacionamentoRepository extends JpaRepository<Relacionamento, 
     Optional<Relacionamento> findByIdUsuarioSeguidorIdAndIdUsuarioSeguidoId(Long idUsuarioSeguidor, Long idUsuarioSeguido);
 	
     void deleteByIdUsuarioSeguidorIdAndIdUsuarioSeguidoId(Long idUsuarioSeguidor, Long idUsuarioSeguido);
+    
+    boolean existsById(RelacionamentoPK id);
+    
 }
