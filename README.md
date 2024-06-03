@@ -30,7 +30,7 @@ Turma 18
  <ul>
     <li>Cadastro de usuários</li>
     <li>Criação de postagens</li>
-    <li>Relacionamentos entre usuários (Serguindo e seguidores)</li>
+    <li>Relacionamentos entre usuários (Seguindo e seguidores)</li>
     <li>Comentários em postagens</li>
     <li>Integração com banco de dados PostgreSQL</li>
     <li>Validação e tratamento de erros e exceções</li>
